@@ -32,60 +32,9 @@ public class ApkPrinter {
 		return new XmlReader(parser, options);
 	}
 
-	public Resources readResources(InputStream inputStream) {
-		// TODO
-		return null;
-	}
-
 	public Manifest readManifest(InputStream inputStream) throws Exception {
 		XmlReader reader = createReader();
 		return reader.from(inputStream, Manifest.class, null);
-	}
-
-	// resources.arsc
-	public Resources readResources(String file) {
-		if (file == null)
-			return null;
-		Resources resources = null;
-		if (file.endsWith(".xml")) {
-			FileInputStream inputStream = null;
-			try {
-				inputStream = new FileInputStream(file);
-				resources = readResources(inputStream);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (inputStream != null) {
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		} else {
-			ZipFile zipFile = null;
-			try {
-				zipFile = new ZipFile(file);
-				ZipEntry zipEntry = zipFile.getEntry("resources.arsc");
-				if (zipEntry != null) {
-					resources = readResources(zipFile.getInputStream(zipEntry));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (zipFile != null) {
-					try {
-						zipFile.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		return resources;
 	}
 
 	public Manifest readManifest(String file) {

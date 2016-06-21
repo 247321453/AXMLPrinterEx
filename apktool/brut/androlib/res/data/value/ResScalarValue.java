@@ -27,87 +27,89 @@ import org.xmlpull.v1.XmlSerializer;
 /**
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
  */
-public abstract class ResScalarValue extends ResIntBasedValue implements
-        ResXmlEncodable, ResValuesXmlSerializable {
-    protected final String mType;
-    protected final String mRawValue;
+public abstract class ResScalarValue extends ResIntBasedValue implements ResXmlEncodable, ResValuesXmlSerializable {
+	protected final String mType;
+	protected final String mRawValue;
 
-    protected ResScalarValue(String type, int rawIntValue, String rawValue) {
-        super(rawIntValue);
-        mType = type;
-        mRawValue = rawValue;
-    }
+	protected ResScalarValue(String type, int rawIntValue, String rawValue) {
+		super(rawIntValue);
+		mType = type;
+		mRawValue = rawValue;
+	}
 
-    @Override
-    public String encodeAsResXmlAttr() throws AndrolibException {
-        if (mRawValue != null) {
-            return mRawValue;
-        }
-        return encodeAsResXml();
-    }
+	public String getRawValue() {
+		return mRawValue;
+	}
 
-    public String encodeAsResXmlItemValue() throws AndrolibException {
-        return encodeAsResXmlValue();
-    }
+	@Override
+	public String encodeAsResXmlAttr() throws AndrolibException {
+		if (mRawValue != null) {
+			return mRawValue;
+		}
+		return encodeAsResXml();
+	}
 
-    @Override
-    public String encodeAsResXmlValue() throws AndrolibException {
-        if (mRawValue != null) {
-            return mRawValue;
-        }
-        return encodeAsResXml();
-    }
+	public String encodeAsResXmlItemValue() throws AndrolibException {
+		return encodeAsResXmlValue();
+	}
 
-    public String encodeAsResXmlNonEscapedItemValue() throws AndrolibException {
-        return encodeAsResXmlValue().replace("&amp;", "&").replace("&lt;","<");
-    }
+	@Override
+	public String encodeAsResXmlValue() throws AndrolibException {
+		if (mRawValue != null) {
+			return mRawValue;
+		}
+		return encodeAsResXml();
+	}
 
-    public boolean hasMultipleNonPositionalSubstitutions() throws AndrolibException {
-        return ResXmlEncoders.hasMultipleNonPositionalSubstitutions(mRawValue);
-    }
+	public String encodeAsResXmlNonEscapedItemValue() throws AndrolibException {
+		return encodeAsResXmlValue().replace("&amp;", "&").replace("&lt;", "<");
+	}
 
-    @Override
-    public void serializeToResValuesXml(XmlSerializer serializer,
-                                        ResResource res) throws IOException, AndrolibException {
-        String type = res.getResSpec().getType().getName();
-        boolean item = !"reference".equals(mType) && !type.equals(mType);
+	public boolean hasMultipleNonPositionalSubstitutions() throws AndrolibException {
+		return ResXmlEncoders.hasMultipleNonPositionalSubstitutions(mRawValue);
+	}
 
-        String body = encodeAsResXmlValue();
+	@Override
+	public void serializeToResValuesXml(XmlSerializer serializer, ResResource res)
+			throws IOException, AndrolibException {
+		String type = res.getResSpec().getType().getName();
+		boolean item = !"reference".equals(mType) && !type.equals(mType);
 
-        // check for resource reference
-        if (!type.equalsIgnoreCase("color")) {
-            if (body.contains("@")) {
-                if (!res.getFilePath().contains("string")) {
-                    item = true;
-                }
-            }
-        }
+		String body = encodeAsResXmlValue();
 
-        // check for using attrib as node or item
-        String tagName = item ? "item" : type;
+		// check for resource reference
+		if (!type.equalsIgnoreCase("color")) {
+			if (body.contains("@")) {
+				if (!res.getFilePath().contains("string")) {
+					item = true;
+				}
+			}
+		}
 
-        serializer.startTag(null, tagName);
-        if (item) {
-            serializer.attribute(null, "type", type);
-        }
-        serializer.attribute(null, "name", res.getResSpec().getName());
+		// check for using attrib as node or item
+		String tagName = item ? "item" : type;
 
-        serializeExtraXmlAttrs(serializer, res);
+		serializer.startTag(null, tagName);
+		if (item) {
+			serializer.attribute(null, "type", type);
+		}
+		serializer.attribute(null, "name", res.getResSpec().getName());
 
-        if (!body.isEmpty()) {
-            serializer.ignorableWhitespace(body);
-        }
+		serializeExtraXmlAttrs(serializer, res);
 
-        serializer.endTag(null, tagName);
-    }
+		if (!body.isEmpty()) {
+			serializer.ignorableWhitespace(body);
+		}
 
-    public String getType() {
-        return mType;
-    }
+		serializer.endTag(null, tagName);
+	}
 
-    protected void serializeExtraXmlAttrs(XmlSerializer serializer,
-                                          ResResource res) throws IOException {
-    }
+	public String getType() {
+		return mType;
+	}
 
-    protected abstract String encodeAsResXml() throws AndrolibException;
+	protected void serializeExtraXmlAttrs(XmlSerializer serializer, ResResource res) throws IOException {
+	}
+
+	protected abstract String encodeAsResXml() throws AndrolibException;
 }

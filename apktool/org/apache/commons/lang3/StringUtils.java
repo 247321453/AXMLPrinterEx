@@ -9,6 +9,21 @@ public class StringUtils {
 		return replace(text, searchString, replacement, -1);
 	}
 
+    public static boolean equals(CharSequence a, CharSequence b) {
+        if (a == b) return true;
+        int length;
+        if (a != null && b != null && (length = a.length()) == b.length()) {
+            if (a instanceof String && b instanceof String) {
+                return a.equals(b);
+            } else {
+                for (int i = 0; i < length; i++) {
+                    if (a.charAt(i) != b.charAt(i)) return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 	public static String replace(String text, String searchString, String replacement, int max) {
 		if ((isEmpty(text)) || (isEmpty(searchString)) || (replacement == null) || (max == 0)) {
 			return text;
