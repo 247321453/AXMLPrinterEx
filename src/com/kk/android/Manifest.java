@@ -7,8 +7,8 @@ import net.kk.xml.annotations.XmlElement;
 import net.kk.xml.annotations.XmlElementList;
 
 /***
- * 然后再去解析values的id
- * 再根据id获取字符串和图片
+ * 然后再去解析values的id 再根据id获取字符串和图片
+ * 
  * @author keyongyu
  *
  */
@@ -51,8 +51,8 @@ public class Manifest {
 
 		@Override
 		public String toString() {
-			return "UsesSdk [minSdkVersion=" + minSdkVersion + ", maxSdkVersion=" + maxSdkVersion
-					+ ", targetSdkVersion=" + targetSdkVersion + "]";
+			return "[minSdkVersion=" + minSdkVersion + ", maxSdkVersion=" + maxSdkVersion + ", targetSdkVersion="
+					+ targetSdkVersion + "]";
 		}
 
 	}
@@ -60,13 +60,14 @@ public class Manifest {
 	private static class NameBase {
 		@XmlAttribute(value = "name", namespace = "http://schemas.android.com/apk/res/android")
 		public String name;
-	}
-	
-	public static class UsePermission extends NameBase{
+
 		@Override
 		public String toString() {
-			return "\n\t"+name;
+			return "\n\t" + name;
 		}
+	}
+
+	public static class UsePermission extends NameBase {
 	}
 
 	public static class Permission extends NameBase {
@@ -94,16 +95,34 @@ public class Manifest {
 
 	public static class AndroidBase {
 		@XmlAttribute(value = "theme", namespace = "http://schemas.android.com/apk/res/android")
-		public int theme;
+		public String theme;
 		@XmlAttribute(value = "label", namespace = "http://schemas.android.com/apk/res/android")
 		public String label;
 		@XmlAttribute(value = "icon", namespace = "http://schemas.android.com/apk/res/android")
-		public int icon;
+		public String icon;
 		@XmlAttribute(value = "name", namespace = "http://schemas.android.com/apk/res/android")
 		public String name;
 
 		@XmlElementList(value = "meta-data", type = MetaData.class)
 		public List<MetaData> metadatas;
+
+		public int getTheme() {
+			return getInteger(theme);
+		}
+		public int getIcon() {
+			return getInteger(icon);
+		}
+
+		public int getLabel() {
+			return getInteger(label);
+		}
+
+		private int getInteger(String str) {
+			if (str == null || str.trim().length() == 0) {
+				return 0;
+			}
+			return Integer.parseInt(str.replace("@", ""));
+		}
 	}
 
 	public static class Application extends AndroidBase {
@@ -123,10 +142,10 @@ public class Manifest {
 
 		@Override
 		public String toString() {
-			return "[name=" + name + ",\n\tallowBackup=" + allowBackup + ",hardwareAccelerated=" + hardwareAccelerated + ",\n\t"
-					+ "theme=" + theme + ",label=" + label + ",icon=" + icon + ",\n\tmetadata="
-					+ metadatas + "\n\tactivitys=" + activitys + "\n\tproviders=" + providers + "\n\treceivers="
-					+ receivers + "\n\tservices=" + services + "\n\t]";
+			return "[name=" + name + ",\n\tallowBackup=" + allowBackup + ",hardwareAccelerated=" + hardwareAccelerated
+					+ ",\n\t" + "theme=" + theme + ",label=" + label + ",icon=" + icon + ",\n\tmetadata=" + metadatas
+					+ "\n\tactivitys=" + activitys + "\n\tproviders=" + providers + "\n\treceivers=" + receivers
+					+ "\n\tservices=" + services + "\n\t]";
 		}
 	}
 
