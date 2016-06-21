@@ -24,6 +24,9 @@ public class Test {
 		// 如果是@开头，则需要获取资源字符串
 		System.out.println("metadata="
 				+ manifest.getApplication().getMetaData("com.mobile.indiapp.glide.CustomGlideMoudle").getValue());
+		//友盟渠道号UMENG_CHANNEL
+		System.out.println("umeng_channel="
+				+ manifest.getApplication().getMetaData("UMENG_CHANNEL").getValue());
 		//
 		AndrolibResources resources = new AndrolibResources();
 		resources.setLogLevel(Level.WARNING);
@@ -44,7 +47,7 @@ public class Test {
 		ResResSpec label = resTable.getResSpec(manifest.getApplication().getLabel());
 		if (label != null) {
 			ResConfigFlags config = new ResConfigFlags();
-			// 默认
+			// app名字默认(values)
 			ResResource res = label.getResource(config);
 			if (res != null) {
 				ResValue resValue = res.getValue();

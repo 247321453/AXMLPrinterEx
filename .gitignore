@@ -1,2 +1,3 @@
-bin
-/pc4.apk
+*.apk
+
+bin/

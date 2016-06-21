@@ -94,6 +94,15 @@ public class Manifest {
 		@XmlAttribute(value = "value", namespace = "http://schemas.android.com/apk/res/android")
 		public String value;
 
+		public MetaData(){
+			
+		}
+		public MetaData(String name, String value) {
+			super();
+			this.name = name;
+			this.value = value;
+		}
+
 		@Override
 		public String toString() {
 			return "\n\t\t" + name + "=" + value;
@@ -142,7 +151,7 @@ public class Manifest {
 					}
 				}
 			}
-			return null;
+			return new MetaData(name, null);
 		}
 		public List<MetaData> getMetaDatas(){
 			return metadatas;
