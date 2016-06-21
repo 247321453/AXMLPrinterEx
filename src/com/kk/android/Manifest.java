@@ -2,6 +2,8 @@ package com.kk.android;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.kk.xml.annotations.XmlAttribute;
 import net.kk.xml.annotations.XmlElement;
 import net.kk.xml.annotations.XmlElementList;
@@ -97,6 +99,9 @@ public class Manifest {
 			return "\n\t\t" + name + "=" + value;
 		}
 
+		public String getValue(){
+			return value;
+		}
 	}
 
 	public static class AndroidBase {
@@ -128,6 +133,19 @@ public class Manifest {
 				return 0;
 			}
 			return Integer.parseInt(str.replace("@", ""));
+		}
+		public MetaData getMetaData(String name){
+			if(metadatas!=null){
+				for(MetaData data:metadatas){
+					if(StringUtils.equals(data.name, name)){
+						return data;
+					}
+				}
+			}
+			return null;
+		}
+		public List<MetaData> getMetaDatas(){
+			return metadatas;
 		}
 	}
 

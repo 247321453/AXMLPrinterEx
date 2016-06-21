@@ -17,18 +17,27 @@ import brut.androlib.res.util.ExtFile;
 public class Test {
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
+		final String zipFile = "pc4.apk";
 		ApkPrinter printer = new ApkPrinter();
-		Manifest manifest = printer.readManifest("pc4.apk");
+		Manifest manifest = printer.readManifest(zipFile);
 		System.out.println("" + manifest);
+		// 如果是@开头，则需要获取资源字符串
+		System.out.println("metadata="
+				+ manifest.getApplication().getMetaData("com.mobile.indiapp.glide.CustomGlideMoudle").getValue());
+		//
 		AndrolibResources resources = new AndrolibResources();
 		resources.setLogLevel(Level.WARNING);
-		ResTable resTable = resources.getResTable(new ExtFile("pc4.apk"), true);
+		ResTable resTable = resources.getResTable(new ExtFile(zipFile), true);
 		ResResSpec icon = resTable.getResSpec(manifest.getApplication().getIcon());
 		if (icon != null) {
 			// icon的路径
 			if (StringUtils.equals(icon.getPackage().getName(), manifest.packageName)) {
-				System.out.println("find icon:" + icon.getName());
-			}else{
+				String path = ZipUtil.findEntryByName(zipFile, "res/drawable", icon.getName());
+				if (StringUtils.isEmpty(path)) {
+					path = ZipUtil.findEntryByName(zipFile, "res/mipmap", icon.getName());
+				}
+				System.out.println("find icon:" + icon.getFullName(true, false) + ",path:" + path);
+			} else {
 				System.out.println("find icon is android default.");
 			}
 		}
