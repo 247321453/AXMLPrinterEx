@@ -23,7 +23,7 @@ public class Test {
 		AndrolibResources resources = new AndrolibResources();
 		resources.setLogLevel(Level.WARNING);
 		ResTable resTable = resources.getResTable(new ExtFile("pc4.apk"), true);
-		ResResSpec icon = resTable.getResSpec(manifest.application.getIcon());
+		ResResSpec icon = resTable.getResSpec(manifest.getApplication().getIcon());
 		if (icon != null) {
 			// icon的路径
 			if (StringUtils.equals(icon.getPackage().getName(), manifest.packageName)) {
@@ -32,7 +32,7 @@ public class Test {
 				System.out.println("find icon is android default.");
 			}
 		}
-		ResResSpec label = resTable.getResSpec(manifest.application.getLabel());
+		ResResSpec label = resTable.getResSpec(manifest.getApplication().getLabel());
 		if (label != null) {
 			ResConfigFlags config = new ResConfigFlags();
 			// 默认

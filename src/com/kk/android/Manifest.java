@@ -32,8 +32,14 @@ public class Manifest {
 	public List<UsePermission> usePermissions;
 
 	@XmlElement("application")
-	public Application application;
+	private Application application;
 
+	public Application getApplication(){
+		if(application == null){
+			application=new Application();
+		}
+		return application;
+	}
 	@Override
 	public String toString() {
 		return "Manifest [\n packageName=" + packageName + ", versionCode=" + versionCode + ", versionName="
