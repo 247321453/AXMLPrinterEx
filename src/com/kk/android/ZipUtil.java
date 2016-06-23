@@ -16,7 +16,7 @@ public class ZipUtil {
 			Enumeration<? extends ZipEntry> es = zip.entries();
 			while (es.hasMoreElements()) {
 				ZipEntry e = es.nextElement();
-				if (Pattern.matches(dirPrefix + "[-a-zA-Z0-9]+/" + name + "\\.[a-zA-Z]+", e.getName())) {
+				if (Pattern.matches(dirPrefix + "[-]{0,1}[-a-zA-Z0-9]*/" + name + "\\.[a-zA-Z]+", e.getName())) {
 					path = e.getName();
 					break;
 				}
