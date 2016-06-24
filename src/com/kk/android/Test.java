@@ -18,15 +18,21 @@ public class Test {
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		final String zipFile = "pc4.apk";
+		//签名验证
+		boolean ok = ZipUtil.validateSign(zipFile);
+		if(!ok){
+			System.err.println("zip is bad Sign");
+			return;
+		}
+		System.out.println("zip is validate Sign=" + ok);
 		ApkPrinter printer = new ApkPrinter();
 		Manifest manifest = printer.readManifest(zipFile);
-		System.out.println("" + manifest);
+		// System.out.println("" + manifest);
 		// 如果是@开头，则需要获取资源字符串
 		System.out.println("metadata="
 				+ manifest.getApplication().getMetaData("com.mobile.indiapp.glide.CustomGlideMoudle").getValue());
-		//友盟渠道号UMENG_CHANNEL
-		System.out.println("umeng_channel="
-				+ manifest.getApplication().getMetaData("UMENG_CHANNEL").getValue());
+		// 友盟渠道号UMENG_CHANNEL
+		System.out.println("umeng_channel=" + manifest.getApplication().getMetaData("UMENG_CHANNEL").getValue());
 		//
 		AndrolibResources resources = new AndrolibResources();
 		resources.setLogLevel(Level.WARNING);
