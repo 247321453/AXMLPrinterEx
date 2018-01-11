@@ -1,5 +1,6 @@
 /**
- *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Connor Tumbleson <connor.tumbleson@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,10 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package brut.androlib.res.data.value;
 
-import brut.androlib.err.AndrolibException;
+import brut.androlib.AndrolibException;
 
 /**
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
@@ -37,7 +37,7 @@ public class ResFileValue extends ResIntBasedValue {
         if (mPath.startsWith("res/")) {
             return mPath.substring(4);
         }
-        if (mPath.startsWith("r/")) {
+        if (mPath.startsWith("r/") || mPath.startsWith("R/")) {
             return mPath.substring(2);
         }
         throw new AndrolibException("File path does not start with \"res/\" or \"r/\": " + mPath);

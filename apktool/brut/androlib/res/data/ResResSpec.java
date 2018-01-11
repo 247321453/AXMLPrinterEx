@@ -1,5 +1,6 @@
 /**
- *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Connor Tumbleson <connor.tumbleson@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,10 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package brut.androlib.res.data;
 
-import brut.androlib.err.AndrolibException;
+import brut.androlib.AndrolibException;
 import brut.androlib.err.UndefinedResObject;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,16 @@ public class ResResSpec {
 
     public ResResSpec(ResID id, String name, ResPackage pkg, ResTypeSpec type) {
         this.mId = id;
-        this.mName = (name.isEmpty() ? ("APKTOOL_DUMMYVAL_" + id.toString()) : name);
+        String cleanName;
+
+        ResResSpec resResSpec = type.getResSpecUnsafe(name);
+        if (resResSpec != null) {
+            cleanName = name + "_APKTOOL_DUPLICATENAME_" + id.toString();
+        } else {
+            cleanName = (name.isEmpty() ? ("APKTOOL_DUMMYVAL_" + id.toString()) : name);
+        }
+        
+        this.mName = cleanName;
         this.mPackage = pkg;
         this.mType = type;
     }

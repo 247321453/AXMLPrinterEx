@@ -1,5 +1,6 @@
 /**
- *  Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Connor Tumbleson <connor.tumbleson@gmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ import java.util.Collection;
 
 public class ApkOptions {
     public boolean forceBuildAll = false;
+    public boolean forceDeleteFramework = false;
     public boolean debugMode = false;
     public boolean verbose = false;
     public boolean copyOriginalFiles = false;

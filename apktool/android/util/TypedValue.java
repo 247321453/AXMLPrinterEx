@@ -1,24 +1,23 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
+/**
+ *  Copyright (C) 2017 Ryszard Wiśniewski <brut.alll@gmail.com>
+ *  Copyright (C) 2017 Connor Tumbleson <connor.tumbleson@gmail.com>
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
-
 package android.util;
 
 /**
  * Container for a dynamically typed data value. Primarily used with
- * {@link android.content.res.Resources} for holding resource values.
  */
 public class TypedValue {
     /** The value contains no data. */
@@ -56,6 +55,11 @@ public class TypedValue {
      * resolved before it can be used like TYPE_REFERENCE
      */
     public static final int TYPE_DYNAMIC_REFERENCE = 0x07;
+    /**
+     * The <var>data</var> an attribute resource identifier, which needs to be resolved
+     * before it can be used like a TYPE_ATTRIBUTE.
+     */
+    public static final int TYPE_DYNAMIC_ATTRIBUTE = 0x08;
     /**
      * Identifies the start of plain integer values. Any type value from this to
      * {@link #TYPE_LAST_INT} means the <var>data</var> field holds a generic
@@ -192,14 +196,11 @@ public class TypedValue {
     /* ------------------------------------------------------------ */
 
     /**
-     * If {@link #density} is equal to this value, then the density should be
      * treated as the system's default density value:
-     * {@link DisplayMetrics#DENSITY_DEFAULT}.
      */
     public static final int DENSITY_DEFAULT = 0;
 
     /**
-     * If {@link #density} is equal to this value, then there is no density
      * associated with the resource and it should not be scaled.
      */
     public static final int DENSITY_NONE = 0xffff;
@@ -239,8 +240,6 @@ public class TypedValue {
     private static final String[] FRACTION_UNIT_STRS = new String[] { "%", "%p" };
 
     /**
-     * Perform type conversion as per {@link #coerceToString()} on an explicitly
-     * supplied type and data.
      *
      * @param type
      *            The data type identifier.
@@ -269,7 +268,7 @@ public class TypedValue {
                         + FRACTION_UNIT_STRS[(data >> COMPLEX_UNIT_SHIFT)
                         & COMPLEX_UNIT_MASK];
             case TYPE_INT_HEX:
-                return "0x" + Integer.toHexString(data);
+                return String.format("0x%08X", data);
             case TYPE_INT_BOOLEAN:
                 return data != 0 ? "true" : "false";
         }

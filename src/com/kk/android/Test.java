@@ -1,9 +1,8 @@
 package com.kk.android;
 
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.logging.Level;
 
 import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.data.ResConfigFlags;
@@ -16,7 +15,7 @@ import brut.androlib.res.util.ExtFile;
 
 public class Test {
 
-	public static void main(String[] args) throws FileNotFoundException, Exception {
+	public static void main(String[] args) throws  Exception {
 		final String zipFile = "pc4.apk";
 		//签名验证
 		boolean ok = ZipUtil.validateSign(zipFile);
