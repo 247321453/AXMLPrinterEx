@@ -31,14 +31,7 @@ public class Manifest {
     public List<UsePermission> usePermissions;
 
     @XmlElement("application")
-    private Application application;
-
-    public Application getApplication() {
-        if (application == null) {
-            application = new Application();
-        }
-        return application;
-    }
+    public Application application;
 
     @Override
     public String toString() {
