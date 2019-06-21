@@ -13,7 +13,7 @@ public class Test {
         final String log = (args.length > 1) ? args[1] : "./apk_" + System.currentTimeMillis() + ".log";
 
         File[] files = new File(dir).listFiles((dir1, name) -> name.toLowerCase(Locale.CHINA).endsWith(".apk"));
-        ApkPrinter printer = new ApkPrinter();
+        AXmlPrinter3 printer = new AXmlPrinter3();
         if (files == null) {
             System.out.println("not found apk in " + dir);
             return;

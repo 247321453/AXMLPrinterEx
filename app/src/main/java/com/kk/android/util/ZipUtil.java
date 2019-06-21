@@ -1,4 +1,4 @@
-package com.kk.android;
+package com.kk.android.util;
 
 import java.io.IOException;
 import java.io.InputStream;
