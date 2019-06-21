@@ -7,8 +7,8 @@ public class Test {
     private static FileOutputStream mLogOut;
 
     public static void main(String[] args) throws Exception {
-        final String dir = (args.length > 0) ? args[0] : "C:\\code\\apk";
-        final String log = (args.length > 1) ? args[1] : "C:\\code\\apk\\apk_" + System.currentTimeMillis() + ".log";
+        final String dir = (args.length > 0) ? args[0] : "./apk";
+        final String log = (args.length > 1) ? args[1] : "./apk_" + System.currentTimeMillis() + ".log";
 
         File[] files = new File(dir).listFiles((dir1, name) -> name.toLowerCase(Locale.CHINA).endsWith(".apk"));
         ApkPrinter printer = new ApkPrinter();
