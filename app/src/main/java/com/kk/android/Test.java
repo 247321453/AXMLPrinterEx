@@ -1,5 +1,7 @@
 package com.kk.android;
 
+import com.kk.android.pm.Manifest;
+
 import java.io.*;
 import java.util.*;
 
@@ -34,6 +36,8 @@ public class Test {
                 if (manifest.application.receivers != null) {
                     count += manifest.application.receivers.size();
                 }
+//                System.out.println(manifest);
+//                break;
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -86,7 +90,7 @@ public class Test {
     private static int getAllProcess(Manifest manifest) {
         String pkg = manifest.packageName;
         List<String> list = new ArrayList<>();
-        List<Manifest.ContextBase> alls = new ArrayList<>();
+        List<Manifest.ComponentInfo> alls = new ArrayList<>();
         if (manifest.application.activitys != null) {
             alls.addAll(manifest.application.activitys);
         }
@@ -99,7 +103,7 @@ public class Test {
         if (manifest.application.providers != null) {
             alls.addAll(manifest.application.providers);
         }
-        for (Manifest.ContextBase info : alls) {
+        for (Manifest.ComponentInfo info : alls) {
             String key;
             if (info.process == null) {
                 key = pkg;

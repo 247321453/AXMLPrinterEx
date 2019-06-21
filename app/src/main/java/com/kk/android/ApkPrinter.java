@@ -1,5 +1,6 @@
 package com.kk.android;
 
+import com.kk.android.pm.Manifest;
 import net.kk.xml.XmlOptions;
 import net.kk.xml.XmlReader;
 import net.kk.xml.adapter.XmlTextAdapter;
