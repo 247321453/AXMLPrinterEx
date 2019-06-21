@@ -9,10 +9,22 @@ sourceCompatibility = rootProject.ext.sourceCompatibility
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets {
-    main.java.srcDirs = [
-            'src/main/java',
-            '../AXMLPrinter3/src/main/java',
-    ]
+    main{
+        java.srcDirs = [
+                'src/main/java',
+                '../AXMLPrinter3/src/main/java',
+        ]
+        resources.srcDir "src/main/resources"
+    }
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.kk.android.Test"
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 dependencies {

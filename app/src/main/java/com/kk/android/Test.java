@@ -1,89 +1,51 @@
 package com.kk.android;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.*;
 import java.util.*;
 
 public class Test {
+    private static FileOutputStream mLogOut;
 
     public static void main(String[] args) throws Exception {
-        final String dir = "C:\\code\\apk";
+        final String dir = (args.length > 0) ? args[0] : "C:\\code\\apk";
+        final String log = (args.length > 1) ? args[1] : "C:\\code\\apk\\apk_" + System.currentTimeMillis() + ".log";
 
-        File[] files = new File(dir).listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase(Locale.CHINA).endsWith(".apk");
-            }
-        });
+        File[] files = new File(dir).listFiles((dir1, name) -> name.toLowerCase(Locale.CHINA).endsWith(".apk"));
         ApkPrinter printer = new ApkPrinter();
         if (files == null) {
             System.out.println("not found apk in " + dir);
             return;
         }
-
+        mLogOut = new FileOutputStream(log);
+        int count = 0;
         for (File file : files) {
+            log("===========================");
             try {
-                parseApk(printer, file);
-            }catch (Throwable e){
+                Manifest manifest = printer.readManifest(file.getAbsolutePath());
+                print(manifest);
+                if (manifest.getApplication().receivers != null) {
+                    count += manifest.getApplication().receivers.size();
+                }
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
-            System.out.println("===========================");
         }
-        //签名验证
-//        boolean ok = ZipUtil.validateSign(zipFile);
-//        if (!ok) {
-//            System.err.println("zip is bad Sign");
-//            return;
-//        }
-
-
-        // System.out.println("" + manifest);
-        // 如果是@开头，则需要获取资源字符串
-        //System.out.println("metadata="
-        //	+ manifest.getApplication().getMetaData("com.mobile.indiapp.glide.CustomGlideMoudle").getValue());
-        // 友盟渠道号UMENG_CHANNEL
-        //System.out.println("umeng_channel=" + manifest.getApplication().getMetaData("UMENG_CHANNEL").getValue());
-        //
-//		AndrolibResources resources = new AndrolibResources();
-//		resources.setLogLevel(Level.WARNING);
-//		ResTable resTable = resources.getResTable(new ExtFile(zipFile), true);
-//		ResResSpec icon = resTable.getResSpec(manifest.getApplication().getIcon());
-//		if (icon != null) {
-//			// icon的路径
-//			if (StringUtils.equals(icon.getPackage().getName(), manifest.packageName)) {
-//				String path = ZipUtil.findEntryByName(zipFile, "res/drawable", icon.getName());
-//				if (StringUtils.isEmpty(path)) {
-//					path = ZipUtil.findEntryByName(zipFile, "res/mipmap", icon.getName());
-//				}
-//				System.out.println("find icon:" + icon.getFullName(true, false) + ",path:" + path);
-//			} else {
-//				System.out.println("find icon is android default.");
-//			}
-//		}
-//		ResResSpec label = resTable.getResSpec(manifest.getApplication().getLabel());
-//		if (label != null) {
-//			ResConfigFlags config = new ResConfigFlags();
-//			// app名字默认(values)
-//			ResResource res = label.getResource(config);
-//			if (res != null) {
-//				ResValue resValue = res.getValue();
-//				if (resValue instanceof ResStringValue) {
-//					System.out.println("find label:" + ((ResStringValue) resValue).getRawValue());
-//				}
-//			}
-//		}
+        log("共" + files.length + "应用，共" + count + "静态广播接收者");
+        mLogOut.flush();
+        mLogOut.close();
     }
 
-    private static void parseApk(ApkPrinter printer, File zipFile) throws Exception {
-//        String xml = "c:\\code\\apk\\AndroidManifest.xml";
-        Manifest manifest = printer.readManifest(zipFile.getAbsolutePath());
-        //printer.readManifest(new FileInputStream(xml), false);
+    private static void log(String text) throws IOException {
+        System.out.println(text);
+        mLogOut.write(text.getBytes("utf-8"));
+        mLogOut.write('\n');
+    }
+
+    private static void print(Manifest manifest) throws IOException {
         String pkg = manifest.packageName;
-        //printer.readManifest(new FileInputStream(xml));
-//        System.out.println(manifest);
         List<Manifest.Receiver> receivers = manifest.getApplication().receivers;
         if (receivers != null) {
-            System.out.println(pkg + " " + manifest.versionName + "(" + manifest.versionCode + ")" + ", 全部广播接收者:" + receivers.size());
+            log(pkg + " " + manifest.versionName + "(" + manifest.versionCode + ")" + ", 全部广播接收者:" + receivers.size());
             Map<String, List<Manifest.Receiver>> map = new HashMap<>();
             for (Manifest.Receiver receiver : receivers) {
                 String key;
@@ -95,25 +57,16 @@ public class Test {
                 if (key.startsWith(":")) {
                     key = pkg + key;
                 }
-                List<Manifest.Receiver> list = map.get(key);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    map.put(key, list);
-                }
+                List<Manifest.Receiver> list = map.computeIfAbsent(key, k -> new ArrayList<>());
                 list.add(receiver);
             }
-            List<String> keys = new ArrayList<String>(map.keySet());
-            Collections.sort(keys, new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return o1.compareTo(o2);
-                }
-            });
+            List<String> keys = new ArrayList<>(map.keySet());
+            keys.sort(String::compareTo);
             for (String process : keys) {
-                System.out.println("进程名：" + process + "，广播数量:" + map.get(process).size());
+                log("进程名：" + process + "，广播数量:" + map.get(process).size());
             }
         } else {
-            System.out.println(pkg + ", 未发现广播接收者");
+            log(pkg + ", 未发现广播接收者");
         }
     }
 }
