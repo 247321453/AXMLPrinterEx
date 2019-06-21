@@ -42,7 +42,7 @@ public class Manifest {
 
     @Override
     public String toString() {
-        return "Manifest [\n packageName=" + packageName +", sharedUserId="+sharedUserId+ ", versionCode=" + versionCode + ", versionName="
+        return "Manifest [\n packageName=" + packageName + ", sharedUserId=" + sharedUserId + ", versionCode=" + versionCode + ", versionName="
                 + versionName + ",\n androidSdk=" + androidSdk + "\n    permissions=\n\t" + permissions
                 + "\n    usePermissions=\n\t" + usePermissions + "\n application=" + application + "\n]";
     }
@@ -273,14 +273,23 @@ public class Manifest {
         @XmlAttribute(value = "path", namespace = Manifest.NAMESPACE)
         public String path;
 
+        @XmlAttribute(value = "mimeType", namespace = Manifest.NAMESPACE)
+        public String mimeType;
+
         @Override
         public String toString() {
-            String str = "data[scheme=" + scheme;
-            if (host != null) {
-                str += ",host=" + host;
+            String str = "data[";
+            if (!TextUtils.isEmpty(scheme)) {
+                str += "scheme=" + scheme + ",";
             }
-            if (path != null) {
-                str += ",path=" + path;
+            if (!TextUtils.isEmpty(host)) {
+                str += "host=" + host + ",";
+            }
+            if (!TextUtils.isEmpty(path)) {
+                str += "path=" + path + ",";
+            }
+            if (!TextUtils.isEmpty(mimeType)) {
+                str += "mimeType=" + mimeType + ",";
             }
             return str;
         }
@@ -296,24 +305,6 @@ public class Manifest {
         @XmlElement("data")
         public List<IntentData> datas;
 
-        private String getDatas() {
-            if (datas == null) {
-                return null;
-            }
-            int count = datas.size();
-            int i = 0;
-            StringBuffer stringBuffer = new StringBuffer("[\n\t\t\t");
-            for (IntentData data : datas) {
-                i++;
-                stringBuffer.append(data);
-                if (i != count) {
-                    stringBuffer.append(",\n\t\t\t");
-                }
-            }
-            stringBuffer.append("]");
-            return stringBuffer.toString();
-        }
-
         @Override
         public String toString() {
 
@@ -321,9 +312,8 @@ public class Manifest {
             if (categorys != null) {
                 str += ",\n\t\t\tcategorys=" + categorys;
             }
-            String data = getDatas();
-            if (!TextUtils.isEmpty(data)) {
-                str += ",\n\t\t\tdatas=" + data;
+            if (datas != null) {
+                str += ",\n\t\t\tdatas=" + datas;
             }
             str += "\n\t\t]";
             return str;
