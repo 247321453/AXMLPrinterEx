@@ -2,3 +2,7 @@
 
 bin/
 /.idea
+out
+.gradle
+.idea
+build

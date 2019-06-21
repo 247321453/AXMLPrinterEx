@@ -1,0 +1,6 @@
+[submodule "libxml"]
+	path = libxml
+	url = https://github.com/247321453/Xml2Object.git
+[submodule "AXMLPrinter3"]
+	path = AXMLPrinter3
+	url = https://github.com/jiangxincode/AXMLPrinter3.git
