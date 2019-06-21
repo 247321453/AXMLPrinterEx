@@ -22,7 +22,11 @@ public class Test {
         }
 
         for (File file : files) {
-            parseApk(printer, file);
+            try {
+                parseApk(printer, file);
+            }catch (Throwable e){
+                e.printStackTrace();
+            }
             System.out.println("===========================");
         }
         //签名验证
